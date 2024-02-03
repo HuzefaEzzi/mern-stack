@@ -10,6 +10,7 @@ const path = require("path")
 const React = require("react")
 const ReactDOMServer = require("react-dom/server")
 const AnimalCard = require("./src/components/AnimalCard").default
+const port = process.env.PORT || 3000
 
 // when the app first launches, make sure the public/uploaded-photos folder exists
 fse.ensureDirSync(path.join("public", "uploaded-photos"))
@@ -116,9 +117,11 @@ function ourCleanup(req, res, next) {
 }
 
 async function start() {
-  const client = new MongoClient("mongodb://root:root@localhost:27017/AmazingMernApp?&authSource=admin")
+  const connectString = process.env.MONGO_CONNECTION;
+  console.log(connectString);
+  const client = new MongoClient(connectString);
   await client.connect()
   db = client.db()
-  app.listen(3000)
+  app.listen(port)
 }
 start()
